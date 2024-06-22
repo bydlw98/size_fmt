@@ -35,6 +35,62 @@ fn test_size_fmt_2_000_000_000_u32() {
     inner_test_size_fmt(2_000_000_000_u32, "2000000000", "1.9G", "2.0G", "1.9Gi");
 }
 
+#[test]
+fn test_size_fmt_1000_i32() {
+    inner_test_size_fmt(1000_i32, "1000", "1000", "1.0k", "1000");
+}
+
+#[test]
+fn test_size_fmt_100_000_i32() {
+    inner_test_size_fmt(100_000_i32, "100000", "98K", "100k", "98Ki");
+}
+
+#[test]
+fn test_size_fmt_2_000_000_i32() {
+    inner_test_size_fmt(2_000_000_i32, "2000000", "2.0M", "2.0M", "2.0Mi");
+}
+
+#[test]
+fn test_size_fmt_200_000_000_i32() {
+    inner_test_size_fmt(200_000_000_i32, "200000000", "191M", "200M", "191Mi");
+}
+
+#[test]
+fn test_size_fmt_2_000_000_000_i32() {
+    inner_test_size_fmt(2_000_000_000_i32, "2000000000", "1.9G", "2.0G", "1.9Gi");
+}
+
+#[test]
+fn test_size_fmt_negative_1000_i32() {
+    inner_test_size_fmt(-1000_i32, "-1000", "-1000", "-1.0k", "-1000");
+}
+
+#[test]
+fn test_size_fmt_negative_100_000_i32() {
+    inner_test_size_fmt(-100_000_i32, "-100000", "-98K", "-100k", "-98Ki");
+}
+
+#[test]
+fn test_size_fmt_negative_2_000_000_i32() {
+    inner_test_size_fmt(-2_000_000_i32, "-2000000", "-2.0M", "-2.0M", "-2.0Mi");
+}
+
+#[test]
+fn test_size_fmt_negative_200_000_000_i32() {
+    inner_test_size_fmt(-200_000_000_i32, "-200000000", "-191M", "-200M", "-191Mi");
+}
+
+#[test]
+fn test_size_fmt_negative_2_000_000_000_i32() {
+    inner_test_size_fmt(
+        -2_000_000_000_i32,
+        "-2000000000",
+        "-1.9G",
+        "-2.0G",
+        "-1.9Gi",
+    );
+}
+
 fn inner_test_size_fmt<I: Integer>(
     size: I,
     raw_str: &str,

@@ -247,3 +247,57 @@ impl private::Sealed for u32 {
         }
     }
 }
+
+impl Integer for i32 {}
+impl private::Sealed for i32 {
+    fn raw_write(self, buf: &mut self::Buffer) -> &str {
+        unsafe { buf.itoa_buf.format(self) }
+    }
+
+    fn human_write(self, buf: &mut self::Buffer) -> &str {
+        self.inner_write(1024, &["K", "M", "G"], buf)
+    }
+
+    fn si_write(self, buf: &mut self::Buffer) -> &str {
+        self.inner_write(1000, &["k", "M", "G"], buf)
+    }
+
+    fn iec_write(self, buf: &mut self::Buffer) -> &str {
+        self.inner_write(1024, &["Ki", "Mi", "Gi"], buf)
+    }
+
+    fn inner_write<'buf>(
+        self,
+        factor: Self,
+        prefixs: &'static [&'static str],
+        buf: &'buf mut self::Buffer,
+    ) -> &'buf str {
+        let mut buf_len: usize = 0;
+
+        let mut is_negative = false;
+        let mut self_abs = self;
+        if self < 0 {
+            is_negative = true;
+            self_abs = -self;
+        }
+
+        if self_abs < factor {
+            unsafe { buf.itoa_buf.format(self) }
+        } else if self_abs < factor.pow(2) {
+            let prefix = prefixs[0];
+            let new_factor = factor.pow(1);
+            fmt_with_prefix!(is_negative, i32, self_abs, new_factor, prefix, buf, buf_len);
+            buf.to_str(buf_len)
+        } else if self_abs < factor.pow(3) {
+            let prefix = prefixs[1];
+            let new_factor = factor.pow(2);
+            fmt_with_prefix!(is_negative, i32, self_abs, new_factor, prefix, buf, buf_len);
+            buf.to_str(buf_len)
+        } else {
+            let prefix = prefixs[2];
+            let new_factor = factor.pow(3);
+            fmt_with_prefix!(is_negative, i32, self_abs, new_factor, prefix, buf, buf_len);
+            buf.to_str(buf_len)
+        }
+    }
+}
