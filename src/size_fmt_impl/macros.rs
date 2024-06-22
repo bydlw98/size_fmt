@@ -34,6 +34,13 @@ macro_rules! fmt_with_prefix {
             // %p is the prefix
             // e.g. "4.0K"
             else {
+                let fract = (r as f32) / ($factor as f32);
+                let mut fract = libm::ceilf(fract * 10.0) as u32;
+                if fract == 10 {
+                    d += 1;
+                    fract = 0;
+                }
+
                 let d_str = itoa_buf.format(d);
                 let d_len = d_str.len();
                 ptr::copy_nonoverlapping(d_str.as_ptr(), buf_ptr.add($buf_len), d_len);
@@ -42,8 +49,6 @@ macro_rules! fmt_with_prefix {
                 ptr::write(buf_ptr.add($buf_len), b'.');
                 $buf_len += 1;
 
-                let fract = (r as f32) / ($factor as f32);
-                let fract = libm::ceilf(fract * 10.0) as u32;
                 let mut itoa_buf = itoa::Buffer::new();
                 let fract_str = itoa_buf.format(fract);
                 let fract_len = fract_str.len();
