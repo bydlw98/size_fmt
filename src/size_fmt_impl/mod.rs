@@ -301,3 +301,65 @@ impl private::Sealed for i32 {
         }
     }
 }
+
+impl Integer for u64 {}
+impl private::Sealed for u64 {
+    fn raw_write(self, buf: &mut self::Buffer) -> &str {
+        unsafe { buf.itoa_buf.format(self) }
+    }
+
+    fn human_write(self, buf: &mut self::Buffer) -> &str {
+        self.inner_write(1024, &["K", "M", "G", "T", "P", "E"], buf)
+    }
+
+    fn si_write(self, buf: &mut self::Buffer) -> &str {
+        self.inner_write(1000, &["k", "M", "G", "T", "P", "E"], buf)
+    }
+
+    fn iec_write(self, buf: &mut self::Buffer) -> &str {
+        self.inner_write(1024, &["Ki", "Mi", "Gi", "Ti", "Pi", "Ei"], buf)
+    }
+
+    fn inner_write<'buf>(
+        self,
+        factor: Self,
+        prefixs: &'static [&'static str],
+        buf: &'buf mut self::Buffer,
+    ) -> &'buf str {
+        let mut buf_len: usize = 0;
+
+        if self < factor {
+            unsafe { buf.itoa_buf.format(self) }
+        } else if self < factor.pow(2) {
+            let prefix = prefixs[0];
+            let new_factor = factor.pow(1);
+            fmt_with_prefix!(false, u64, self, new_factor, prefix, buf, buf_len);
+            buf.to_str(buf_len)
+        } else if self < factor.pow(3) {
+            let prefix = prefixs[1];
+            let new_factor = factor.pow(2);
+            fmt_with_prefix!(false, u64, self, new_factor, prefix, buf, buf_len);
+            buf.to_str(buf_len)
+        } else if self < factor.pow(4) {
+            let prefix = prefixs[2];
+            let new_factor = factor.pow(3);
+            fmt_with_prefix!(false, u64, self, new_factor, prefix, buf, buf_len);
+            buf.to_str(buf_len)
+        } else if self < factor.pow(5) {
+            let prefix = prefixs[3];
+            let new_factor = factor.pow(4);
+            fmt_with_prefix!(false, u64, self, new_factor, prefix, buf, buf_len);
+            buf.to_str(buf_len)
+        } else if self < factor.pow(6) {
+            let prefix = prefixs[4];
+            let new_factor = factor.pow(5);
+            fmt_with_prefix!(false, u64, self, new_factor, prefix, buf, buf_len);
+            buf.to_str(buf_len)
+        } else {
+            let prefix = prefixs[5];
+            let new_factor = factor.pow(6);
+            fmt_with_prefix!(false, u64, self, new_factor, prefix, buf, buf_len);
+            buf.to_str(buf_len)
+        }
+    }
+}
