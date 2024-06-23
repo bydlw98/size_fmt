@@ -49,6 +49,9 @@ impl Default for Buffer {
     }
 }
 
+/// An integer that can be written into a [`size_fmt::Buffer`].
+///
+/// This trait is sealed and cannot be implemented for types outside of size_fmt.
 pub trait Integer: itoa::Integer + private::Sealed {}
 
 mod private {
