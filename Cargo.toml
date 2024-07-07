@@ -1,6 +1,6 @@
 [package]
 name = "size_fmt"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 categories = ["value-formatting", "no-std", "no-std::no-alloc"]
 description = "This library formats sizes in a human readable format"
