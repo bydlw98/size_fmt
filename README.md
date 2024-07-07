@@ -1,10 +1,15 @@
 # size_fmt
 
+[![CICD](https://github.com/bydlw98/size_fmt/actions/workflows/CICD.yml/badge.svg)](https://github.com/bydlw98/size_fmt/actions/workflows/CICD.yml)
+[![Crates.io](https://img.shields.io/crates/v/size_fmt)](https://crates.io/crates/size_fmt)
+[![Docs.rs](https://img.shields.io/docsrs/size_fmt)](https://docs.rs/size_fmt)
+![License](https://img.shields.io/crates/l/size_fmt)
+
 This library formats sizes in a human readable format.
 
 ---
 
-The Grid API and Implementation is inspired by [`dtolnay/itoa`].
+The API and Implementation is inspired by [`dtolnay/itoa`].
 
 ---
 
